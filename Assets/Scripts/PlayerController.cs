@@ -5,13 +5,14 @@ using System.Collections;
 [System.Serializable]
 public enum UserOperationType {
 	Free,
-	AlwaysUp
+	Cricle
 }
 
 public class PlayerController : GameItem {
-	public UserOperationType userOperationType = UserOperationType.AlwaysUp;
+	public UserOperationType userOperationType = UserOperationType.Cricle;
 	public float baseSpeedRateOfRadius = 2.0f/3; 
 	public float decaySpeedRateOfVolume = 0.25f;
+	public bool dir = true;
 
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
@@ -20,9 +21,9 @@ public class PlayerController : GameItem {
 	void FixedUpdate() {
 		// move
 		float speed = GetSpeed ();
-		Vector3 movement = Vector3.zero;
-		if (userOperationType == UserOperationType.AlwaysUp) {
-			movement = new Vector3 (0, 0, speed);
+		if (userOperationType == UserOperationType.Cricle) {
+			_rb.velocity = GetDirection()*speed*radius;
+			Debug.Log("_rb.velocity = " + _rb.velocity);
 		}
 		bool hasInput = false;
 		Vector3 pos = Vector3.zero;
@@ -50,10 +51,8 @@ public class PlayerController : GameItem {
 			_rb.AddForce (_lastMovement*_rb.mass, ForceMode.Impulse);
 			RecordUserOperationInfo(pos);
 		} else {
-			_rb.AddForce (-_lastMovement*_rb.mass, ForceMode.Impulse);
 			ResetUserOperationInfo();
 		}
-		_rb.AddForce (movement*_rb.mass, ForceMode.Impulse);
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -74,6 +73,21 @@ public class PlayerController : GameItem {
 	public float GetSpeed() {
 		int rate = Mathf.FloorToInt(GetValue (radius) / GetValue (_baseRadius));
 		return baseSpeedRateOfRadius * radius * Mathf.Pow (decaySpeedRateOfVolume, rate);
+	}
+
+	public Vector3 GetDirection() {
+		Vector3 initSpeed = new Vector3 (transform.localPosition.z, 0, -transform.localPosition.x) * (dir ? 1 : -1);
+		return initSpeed / initSpeed.magnitude;
+	}
+
+	public Vector3 GetDistanceToCenter() {
+		Vector3 res = -transform.position;
+		res.y = 0;
+		return res;
+	}
+
+	public void SetStartPos(Vector3 pos) {
+		transform.position = pos;
 	}
 
 	// user operation
