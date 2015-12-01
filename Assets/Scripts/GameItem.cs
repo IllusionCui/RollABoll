@@ -17,7 +17,7 @@ public class GameItem : MonoBehaviour {
 		radius = newRadius;
 		_rb.mass = value;
 		transform.localScale = transform.localScale * radiusRate;
-		Debug.Log ("[GameItem] UpdateRadiusByValue value = " + value + ", radius = " + radius + ", rb.mass = " + _rb.mass + ",radiusRate = " + radiusRate);
+		//Debug.Log ("[GameItem] UpdateRadiusByValue value = " + value + ", radius = " + radius + ", rb.mass = " + _rb.mass + ",radiusRate = " + radiusRate);
 	}
 	
 	public void Eat(GameItem gItem) {
@@ -25,7 +25,7 @@ public class GameItem : MonoBehaviour {
 	}
 	
 	public void BeEat(GameItem gItem) {
-		Debug.Log ("[GameItem] BeEat radius = " + radius);
+		//Debug.Log ("[GameItem] BeEat radius = " + radius);
 		Destroy (this.gameObject);
 	}
 

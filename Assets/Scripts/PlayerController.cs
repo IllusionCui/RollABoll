@@ -2,14 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-[System.Serializable]
-public enum UserOperationType {
-	Free,
-	Cricle
-}
-
 public class PlayerController : GameItem {
-	public UserOperationType userOperationType = UserOperationType.Cricle;
 	public float baseSpeedRateOfRadius = 2.0f/3; 
 	public float decaySpeedRateOfVolume = 0.25f;
 	public bool dir = true;
@@ -17,45 +10,15 @@ public class PlayerController : GameItem {
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
 
+	void Update() {
+		if (Config.Instance.userOperationType == UserOperationType.Cricle) {
+			CricleOperation();
+		}
+	}
+
 	void FixedUpdate() {
-		// move
-		Config config = Config.Instance;
-		float speed = GetSpeed ();
-		if (userOperationType == UserOperationType.Cricle) {
-			_rb.velocity = GetDirection()*speed*config.cricleSpeedRate;
-		}
-		bool hasInput = false;
-		Vector3 pos = Vector3.zero;
-		if (Input.GetMouseButton (0)) {
-			hasInput = true;
-			pos = Input.mousePosition;
-		}
-		if (!hasInput && Input.touchCount > 0) {
-			Touch myTouch = Input.GetTouch(0);
-			if (myTouch.phase == TouchPhase.Began || myTouch.phase == TouchPhase.Moved) {
-				hasInput = true;
-				pos = myTouch.position;
-			}
-		}
-		if (hasInput) {
-			if (_isUserOperation) {
-				// turn 
-				float disX = pos.x - _lastUserOperationPos.x;
-				if (userOperationType == UserOperationType.Free) {
-					float rate = config.moveRate * speed;
-					float disY = pos.y - _lastUserOperationPos.y;
-					Vector3 movement = new Vector3 (disX * rate, 0, disY * rate);
-					_rb.AddForce (movement * _rb.mass, ForceMode.Impulse);
-				} else {
-					float rate = config.moveRate * config.cricleMoveRate / Screen.width;
-					Vector3 dirToCenter = new Vector3 (transform.localPosition.x, 0, -transform.localPosition.y);
-					dirToCenter = dirToCenter * disX * rate;
-					_rb.velocity = _rb.velocity + dirToCenter;
-				}
-			} 
-			RecordUserOperationInfo(pos);
-		} else {
-			ResetUserOperationInfo();
+		if (Config.Instance.userOperationType == UserOperationType.Free) {
+			FreeOperation();
 		}
 	}
 
@@ -103,5 +66,72 @@ public class PlayerController : GameItem {
 	private void RecordUserOperationInfo(Vector3 pos) {
 		_isUserOperation = true;
 		_lastUserOperationPos = pos;
+	}
+
+	private void CricleOperation() {
+		// move
+		Config config = Config.Instance;
+		float speed = GetSpeed ();
+		bool hasInput = false;
+		Vector3 pos = Vector3.zero;
+		if (Input.GetMouseButton (0)) {
+			hasInput = true;
+			pos = Input.mousePosition;
+		}
+		if (!hasInput && Input.touchCount > 0) {
+			Touch myTouch = Input.GetTouch(0);
+			if (myTouch.phase == TouchPhase.Began || myTouch.phase == TouchPhase.Moved) {
+				hasInput = true;
+				pos = myTouch.position;
+			}
+		}
+		if (hasInput) {
+			if (_isUserOperation) {
+				// turn 
+				float disX = pos.x - _lastUserOperationPos.x;
+				float rate = config.moveRate * speed * config.cricleMoveRate / Screen.width;
+				Vector3 dirToCenter = new Vector3 (transform.localPosition.x, 0, transform.localPosition.z);
+				dirToCenter = dirToCenter.normalized * (disX * rate * (dir ? -1 : 1));
+				Debug.Log("dirToCenter = " + dirToCenter + ",disX = " + disX);
+				transform.Translate(dirToCenter);
+			} 
+			RecordUserOperationInfo(pos);
+		} else {
+			ResetUserOperationInfo();
+		}
+		
+		_rb.velocity = GetDirection()*speed*config.cricleSpeedRate;
+	}
+
+	private void FreeOperation() {
+		// move
+		Config config = Config.Instance;
+		float speed = GetSpeed ();
+		bool hasInput = false;
+		Vector3 pos = Vector3.zero;
+		if (Input.GetMouseButton (0)) {
+			hasInput = true;
+			pos = Input.mousePosition;
+		}
+		if (!hasInput && Input.touchCount > 0) {
+			Touch myTouch = Input.GetTouch(0);
+			if (myTouch.phase == TouchPhase.Began || myTouch.phase == TouchPhase.Moved) {
+				hasInput = true;
+				pos = myTouch.position;
+			}
+		}
+		if (hasInput) {
+			if (_isUserOperation) {
+				// turn 
+				float disX = pos.x - _lastUserOperationPos.x;
+				float rate = config.moveRate * speed;
+				float disY = pos.y - _lastUserOperationPos.y;
+				Vector3 movement = new Vector3 (disX * rate, 0, disY * rate);
+				_rb.AddForce (movement * _rb.mass, ForceMode.Impulse);
+			} 
+			RecordUserOperationInfo(pos);
+		} else {
+			ResetUserOperationInfo();
+		}
 	}
 }
