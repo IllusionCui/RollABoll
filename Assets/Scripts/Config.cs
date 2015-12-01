@@ -5,6 +5,10 @@ public class Config : MonoBehaviour {
 	public float moveRate = 1.5f;
 	public float absorbRate = 1.0f/6;
 
+	// cricle
+	public float cricleSpeedRate = 100.0f;
+	public float cricleMoveRate = 100f;//0.000005f;
+
 	private static Config _instance = null;
 	public static Config Instance {
 		get {

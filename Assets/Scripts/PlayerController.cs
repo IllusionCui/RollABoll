@@ -16,14 +16,13 @@ public class PlayerController : GameItem {
 
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
-	private Vector3 _lastMovement;
 
 	void FixedUpdate() {
 		// move
+		Config config = Config.Instance;
 		float speed = GetSpeed ();
 		if (userOperationType == UserOperationType.Cricle) {
-			_rb.velocity = GetDirection()*speed*radius;
-			Debug.Log("_rb.velocity = " + _rb.velocity);
+			_rb.velocity = GetDirection()*speed*config.cricleSpeedRate;
 		}
 		bool hasInput = false;
 		Vector3 pos = Vector3.zero;
@@ -42,13 +41,18 @@ public class PlayerController : GameItem {
 			if (_isUserOperation) {
 				// turn 
 				float disX = pos.x - _lastUserOperationPos.x;
-				_lastMovement.x = disX*Config.Instance.moveRate*speed;
 				if (userOperationType == UserOperationType.Free) {
+					float rate = config.moveRate * speed;
 					float disY = pos.y - _lastUserOperationPos.y;
-					_lastMovement.z = disY*Config.Instance.moveRate*speed;
+					Vector3 movement = new Vector3 (disX * rate, 0, disY * rate);
+					_rb.AddForce (movement * _rb.mass, ForceMode.Impulse);
+				} else {
+					float rate = config.moveRate * config.cricleMoveRate / Screen.width;
+					Vector3 dirToCenter = new Vector3 (transform.localPosition.x, 0, -transform.localPosition.y);
+					dirToCenter = dirToCenter * disX * rate;
+					_rb.velocity = _rb.velocity + dirToCenter;
 				}
 			} 
-			_rb.AddForce (_lastMovement*_rb.mass, ForceMode.Impulse);
 			RecordUserOperationInfo(pos);
 		} else {
 			ResetUserOperationInfo();
@@ -94,7 +98,6 @@ public class PlayerController : GameItem {
 	private void ResetUserOperationInfo() {
 		_isUserOperation = false;
 		_lastUserOperationPos = Vector3.zero;
-		_lastMovement = Vector3.zero;
 	}
 	
 	private void RecordUserOperationInfo(Vector3 pos) {
