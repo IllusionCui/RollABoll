@@ -2,8 +2,13 @@
 using System.Collections;
 
 public class GameItem : MonoBehaviour {
+	public float baseSpeedRateOfRadius = 2.0f/3; 
+	public float decaySpeedRateOfVolume = 0.25f;
 	public float radius;
-	
+
+	public bool autoCricle = false;
+	public bool dir = true;
+
 	protected Rigidbody _rb;
 	protected float _baseRadius;
 	
@@ -17,7 +22,6 @@ public class GameItem : MonoBehaviour {
 		radius = newRadius;
 		_rb.mass = value;
 		transform.localScale = transform.localScale * radiusRate;
-		//Debug.Log ("[GameItem] UpdateRadiusByValue value = " + value + ", radius = " + radius + ", rb.mass = " + _rb.mass + ",radiusRate = " + radiusRate);
 	}
 	
 	public void Eat(GameItem gItem) {
@@ -25,12 +29,34 @@ public class GameItem : MonoBehaviour {
 	}
 	
 	public void BeEat(GameItem gItem) {
-		//Debug.Log ("[GameItem] BeEat radius = " + radius);
 		Destroy (this.gameObject);
+	}
+	
+	public float GetSpeed() {
+		int rate = Mathf.FloorToInt(GetValue (radius) / GetValue (_baseRadius));
+		return baseSpeedRateOfRadius * radius * Mathf.Pow (decaySpeedRateOfVolume, rate);
+	}
+	
+	public Vector3 GetDirection() {
+		Vector3 initSpeed = new Vector3 (transform.localPosition.z, 0, -transform.localPosition.x) * (dir ? 1 : -1);
+		return initSpeed / initSpeed.magnitude;
+	}
+	
+	public Vector3 GetCricleRunVector() {
+		// move
+		Config config = Config.Instance;
+		float speed = GetSpeed ();
+		return GetDirection()*speed*config.moveRate;
 	}
 
 	void Awake() {
 		_rb = GetComponent<Rigidbody>();
 		_baseRadius = radius;
+	}
+
+	void FixedUpdate() {
+		if (autoCricle) {
+			_rb.velocity = GetCricleRunVector();
+		}
 	}
 }

@@ -1,21 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
-public enum UserOperationType {
-	Free,
-	Cricle
-}
-
 public class Config : MonoBehaviour {
 	public float moveRate = 1.5f;
 	public float absorbRate = 1.0f/6;
 
-	// operation
-	public UserOperationType userOperationType = UserOperationType.Cricle;
-	// cricle
-	public float cricleSpeedRate = 100.0f;
-	public float cricleMoveRate = 5.0f;
+	// cricle operation
+	public float operationLimit = 0.0f;
+	public float cricleSpeedRate = 0.3f;
+	public float cricleTimeRate = 5.0f;
 
 	private static Config _instance = null;
 	public static Config Instance {

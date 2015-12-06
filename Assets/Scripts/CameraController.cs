@@ -2,17 +2,21 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
-	public GameObject player;
-
-	private Vector3 offset;
-
-	// Use this for initialization
-	void Start () {
-		offset = transform.position;
-	}
+	public GameItem player;
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		transform.position = offset + player.transform.position;
+		if (player != null) {
+			Vector3 targetPos = player.transform.position;
+			Vector3 pos = targetPos;
+			float length = 10.0f;// base the play size
+			Vector3 v = player.GetCricleRunVector();
+			v = v.normalized;
+			pos.x -= length*v.x;
+			pos.y += length;
+			pos.z -= length*v.z;
+			transform.position = pos;
+			transform.rotation = Quaternion.LookRotation(targetPos - pos);
+		}
 	}
 }
