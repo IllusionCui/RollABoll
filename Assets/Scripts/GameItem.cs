@@ -31,7 +31,7 @@ public class GameItem : MonoBehaviour {
 	
 	public Vector3 GetDirection() {
 		Vector3 initSpeed = new Vector3 (transform.localPosition.z, 0, -transform.localPosition.x) * (dir ? 1 : -1);
-		return initSpeed / initSpeed.magnitude;
+		return initSpeed.normalized;
 	}
 	
 	public Vector3 GetCricleRunVector() {

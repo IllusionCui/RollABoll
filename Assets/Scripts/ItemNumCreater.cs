@@ -48,7 +48,8 @@ public class ItemNumCreater : MonoBehaviour {
 	private void StartCreate() {
 		FinishCreate ();
 		_isCreating = true;
-		_createNumPerWave = numLimit - _items.Count;
+		_createNumPerWave = (numLimit - _items.Count)/waveNum;
+		_createNumPerWave = Mathf.Max (_createNumPerWave, 1);
 
 		StartCoroutine ("CreateItem");
 	}
