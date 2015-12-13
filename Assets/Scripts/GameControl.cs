@@ -1,28 +1,65 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameControl : MonoBehaviour {
 	public GameObject plane;
-	public GameObject pickPerfab;
-	public GameObject pickHolder;
-	public int pickNum = 1000;
+	public GameObject itemsHolder;
 	public GameObject player;
 
-	private int _pickNum = 0;
+	public GameObject startBox;
+	public GameObject endBox;
+
+	private ItemNumCreater[] _itemCreaters;
+	private PlayerController _pControl;
+	private GameObject _currBox;
 
 	public void StartGame() {
-		PlayerController pControl = player.GetComponent<PlayerController>();
-		pControl.SetStartPos (GetRandomPosInPlane (pControl));
-
-		_pickNum = 0;
-		while (_pickNum < pickNum) {
-			CreatePick();
-		}
-		StartCoroutine ("CheckCreateNewPick");
+		CloseBox ();
+		_pControl.IsOperationable = true;
 	}
 
-	public Vector3 GetRandomPosInPlane(GameItem item) {
-		float r = plane.transform.localScale.x*5 - item.radius;
+	public void GameOver() {
+		_pControl.Reset();
+		ShowBox (endBox);
+	}
+
+	public void ShowBox(GameObject box) {
+		CloseBox ();
+		if (box != null) {
+			_currBox = box;
+			_currBox.SetActive (true);
+		}
+	}
+
+	public void CloseBox() {
+		if (_currBox != null) {
+			_currBox.SetActive (false);
+		}
+	}
+
+	public void InitGameView() {
+		_pControl = player.GetComponent<PlayerController>();
+		_pControl.Reset();
+		if (_itemCreaters != null) {
+			foreach(var it in _itemCreaters) {
+				it.Reset ();
+			}
+		}
+	}
+
+	public void OnItemBeEat(GameObject item) {
+		if (_itemCreaters != null) {
+			foreach(var it in _itemCreaters) {
+				if (it.RemoveItem (item)) {
+					break;
+				}
+			}
+		}
+	}
+
+	public Vector3 GetRandomPosInPlane(GameObject item) {
+		float r = plane.transform.localScale.x*5;
 		r = Random.Range (0, r);
 		float a = Random.Range (0.0f, 360);
 		return new Vector3 (r * Mathf.Sin (a), item.transform.position.y, r * Mathf.Cos (a));
@@ -42,29 +79,22 @@ public class GameControl : MonoBehaviour {
 		}
 		_instance = this;
 		DontDestroyOnLoad (this);
-	}
 
-	void Start() {
-		StartGame ();
-	}
-
-	IEnumerator CheckCreateNewPick() {
-		while(true) {
-			yield return new WaitForSeconds(0.2f);
-
-			if (_pickNum < pickNum) {
-				CreatePick();
+		_itemCreaters = GetComponents<ItemNumCreater>();
+		if (_itemCreaters != null) {
+			foreach(var it in _itemCreaters) {
+				it.onItemsCreateEvent = OnItemsCreate;
 			}
 		}
 	}
 
-	private GameObject CreatePick() {
-		GameObject pick = Instantiate (pickPerfab);
-		GameItem gItem = player.GetComponent<GameItem>();
-		pick.transform.position = GetRandomPosInPlane (gItem);
-		pick.transform.SetParent (pickHolder.transform, true);
+	void Start() {
+		InitGameView ();
+		ShowBox (startBox);
+	}
 
-		_pickNum++;
-		return pick;
+	private void OnItemsCreate(GameObject pick) {
+		pick.transform.position = GetRandomPosInPlane (pick);
+		pick.transform.SetParent (itemsHolder.transform, true);
 	}
 }

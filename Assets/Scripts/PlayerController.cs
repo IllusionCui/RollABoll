@@ -3,25 +3,58 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : GameItem {
-	public CdController cdController;
+	public CdController operationCdController;
+	public ValueController energyValueController;
 
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
 	private bool _operationDir;// true : far from center; false : go to center
 
+	private bool _isOperationable = false;
+	public bool IsOperationable{
+		set { 
+			_isOperationable = value;
+		}
+		get { return _isOperationable; }
+	}
+
 	void FixedUpdate() {
-		CricleOperation();
+		if (IsOperationable) {
+			CricleOperation ();
+		} else {
+			CricleAction ();
+		}
 	}
 
 	void OnTriggerEnter(Collider other) {
+		if (!IsOperationable) {
+			return;
+		}
+
+		ObstacleItem obstacle = other.gameObject.GetComponent<ObstacleItem>();
+		if (obstacle != null) {
+			Debug.Log ("ObstacleItem");
+			GameControl.Instance.GameOver ();
+			return;
+		}
+
+		EnergyItem energyItem = other.gameObject.GetComponent<EnergyItem> ();
+		if (energyItem != null) {
+			Debug.Log ("energyItem");
+			energyValueController.AddValue (energyItem.value);
+			GameControl.Instance.OnItemBeEat (other.gameObject);
+			return;
+		}
+
 		GameItem gItem = other.gameObject.GetComponent<GameItem>();
 		if (gItem != null) {
+			Debug.Log ("GameItem");
 			if (radius > gItem.radius) {
 				// eat it
 				float selfValue = GetValue(radius);
 				float add = gItem.GetValue(gItem.radius)*Config.Instance.absorbRate;
 				UpdateRadiusByValue(selfValue + add);
-				gItem.BeEat(this);
+				GameControl.Instance.OnItemBeEat (other.gameObject);
 			} else if (radius < gItem.radius) {
 				// back
 			} // else nothing happened
@@ -34,8 +67,10 @@ public class PlayerController : GameItem {
 		return res;
 	}
 
-	public void SetStartPos(Vector3 pos) {
-		transform.position = pos;
+	public void Reset() {
+		IsOperationable = false;
+		UpdateRadiusByValue(GetValue(_baseRadius));
+		transform.position = GameControl.Instance.GetRandomPosInPlane (this.gameObject);
 	}
 
 	// user operation
@@ -79,9 +114,9 @@ public class PlayerController : GameItem {
 						_operationDir = dir;
 					}
 					// turn 
-					cdController.Active = true;
-					cdController.timeLength = abDisX*config.cricleTimeRate;
-					Debug.Log("timeLength = " + cdController.timeLength + ", _operationDir = " + _operationDir);
+					operationCdController.Active = true;
+					operationCdController.timeLength = abDisX*config.cricleTimeRate;
+					Debug.Log("timeLength = " + operationCdController.timeLength + ", _operationDir = " + _operationDir);
 				}
 			} 
 			RecordUserOperationInfo(pos);
@@ -91,9 +126,9 @@ public class PlayerController : GameItem {
 		
 		// base rate
 		_rb.velocity = GetDirection()*speed*config.moveRate;
-		if (cdController != null && cdController.Active) {
-			if (cdController.IsFinished) {
-				cdController.Active = false;
+		if (operationCdController != null && operationCdController.Active) {
+			if (operationCdController.IsFinished) {
+				operationCdController.Active = false;
 			} else {
 				Vector3 operationSpeed = (new Vector3 (transform.localPosition.x, 0, transform.localPosition.z)).normalized * (_operationDir ? 1 : -1)*speed*config.cricleSpeedRate;
 				Debug.Log("operationSpeed = " + operationSpeed + ", _rb.velocity = " + _rb.velocity);

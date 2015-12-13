@@ -24,14 +24,6 @@ public class GameItem : MonoBehaviour {
 		transform.localScale = transform.localScale * radiusRate;
 	}
 	
-	public void Eat(GameItem gItem) {
-
-	}
-	
-	public void BeEat(GameItem gItem) {
-		Destroy (this.gameObject);
-	}
-	
 	public float GetSpeed() {
 		int rate = Mathf.FloorToInt(GetValue (radius) / GetValue (_baseRadius));
 		return baseSpeedRateOfRadius * radius * Mathf.Pow (decaySpeedRateOfVolume, rate);
@@ -56,7 +48,11 @@ public class GameItem : MonoBehaviour {
 
 	void FixedUpdate() {
 		if (autoCricle) {
-			_rb.velocity = GetCricleRunVector();
-		}
+			CricleAction ();
+		} 
+	}
+
+	protected void CricleAction() {
+		_rb.velocity = GetCricleRunVector ();
 	}
 }
