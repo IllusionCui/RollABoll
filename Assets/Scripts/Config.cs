@@ -2,7 +2,10 @@
 using System.Collections;
 
 public class Config : MonoBehaviour {
-	public float moveRate = 1.5f;
+	public float speedParmB = 0.01f;
+	public float speedParmA = 0.0001f;
+
+	public float moveRate = 1.0f;
 	public float absorbRate = 1.0f/6;
 
 	// cricle operation

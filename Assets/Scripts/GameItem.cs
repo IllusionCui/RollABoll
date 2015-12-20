@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class GameItem : MonoBehaviour {
-	public float baseSpeedRateOfRadius = 2.0f/3; 
-	public float decaySpeedRateOfVolume = 0.25f;
 	public float radius;
 
 	public bool autoCricle = false;
@@ -23,10 +21,10 @@ public class GameItem : MonoBehaviour {
 		_rb.mass = value;
 		transform.localScale = transform.localScale * radiusRate;
 	}
-	
+
 	public float GetSpeed() {
-		int rate = Mathf.FloorToInt(GetValue (radius) / GetValue (_baseRadius));
-		return baseSpeedRateOfRadius * radius * Mathf.Pow (decaySpeedRateOfVolume, rate);
+		float resA = Mathf.Pow (Config.Instance.speedParmA / Mathf.Pow (radius, 2), 0.5f);
+		return Config.Instance.speedParmB + resA;
 	}
 	
 	public Vector3 GetDirection() {

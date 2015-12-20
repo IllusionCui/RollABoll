@@ -106,7 +106,7 @@ public class PlayerController : GameItem {
 			if (_isUserOperation) {
 				float disX = (pos.x - _lastUserOperationPos.x) / Screen.width;
 				float abDisX = Mathf.Abs(disX);
-				Debug.Log("pos = " + pos + ", _lastUserOperationPos = " + _lastUserOperationPos + ", disX = " + disX + ",config.operationLimit = " + config.operationLimit + ", abDisX = " + abDisX);
+//				Debug.Log("pos = " + pos + ", _lastUserOperationPos = " + _lastUserOperationPos + ", disX = " + disX + ",config.operationLimit = " + config.operationLimit + ", abDisX = " + abDisX);
 				if (abDisX > config.operationLimit) {
 					if (disX > 0) {
 						_operationDir = !dir;
@@ -116,7 +116,7 @@ public class PlayerController : GameItem {
 					// turn 
 					operationCdController.Active = true;
 					operationCdController.timeLength = abDisX*config.cricleTimeRate;
-					Debug.Log("timeLength = " + operationCdController.timeLength + ", _operationDir = " + _operationDir);
+//					Debug.Log("timeLength = " + operationCdController.timeLength + ", _operationDir = " + _operationDir);
 				}
 			} 
 			RecordUserOperationInfo(pos);
@@ -131,7 +131,7 @@ public class PlayerController : GameItem {
 				operationCdController.Active = false;
 			} else {
 				Vector3 operationSpeed = (new Vector3 (transform.localPosition.x, 0, transform.localPosition.z)).normalized * (_operationDir ? 1 : -1)*speed*config.cricleSpeedRate;
-				Debug.Log("operationSpeed = " + operationSpeed + ", _rb.velocity = " + _rb.velocity);
+//				Debug.Log("operationSpeed = " + operationSpeed + ", _rb.velocity = " + _rb.velocity);
 				_rb.velocity = _rb.velocity + operationSpeed;
 			}
 		}
