@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameControl : MonoBehaviour {
-	public GameObject plane;
+	public PlaneInfo[] planeInfo;
 	public GameObject itemsHolder;
 	public GameObject player;
 
 	public GameObject startBox;
 	public GameObject endBox;
 
-	private ItemNumCreater[] _itemCreaters;
 	private PlayerController _pControl;
 	private GameObject _currBox;
 
@@ -41,28 +40,30 @@ public class GameControl : MonoBehaviour {
 	public void InitGameView() {
 		_pControl = player.GetComponent<PlayerController>();
 		_pControl.Reset();
-		if (_itemCreaters != null) {
-			foreach(var it in _itemCreaters) {
-				it.Reset ();
+		if (planeInfo != null) {
+			for(int i =0; i < planeInfo.Length; i++) {
+				planeInfo [i].Reset ();
 			}
 		}
 	}
 
 	public void OnItemBeEat(GameObject item) {
-		if (_itemCreaters != null) {
-			foreach(var it in _itemCreaters) {
-				if (it.RemoveItem (item)) {
-					break;
-				}
+		if (planeInfo != null) {
+			for(int i =0; i < planeInfo.Length; i++) {
+				planeInfo [i].RemoveItem (item);
 			}
 		}
 	}
 
-	public Vector3 GetRandomPosInPlane(GameObject item) {
-		float r = plane.transform.localScale.x*5;
-		r = Random.Range (0, r);
-		float a = Random.Range (0.0f, 360);
-		return new Vector3 (r * Mathf.Sin (a), item.transform.position.y, r * Mathf.Cos (a));
+	public Vector3 GetRandomPosInPlane(GameObject item, int index = 0) {
+		if (planeInfo != null) {
+			index = Mathf.Min (planeInfo.Length - 1, index);
+			if (index >= 0) {
+				return planeInfo [index].GetRandomPosInPlane (item);
+			}
+		}
+
+		return item.transform.localPosition;
 	}
 	
 	private static GameControl _instance = null;
@@ -79,22 +80,10 @@ public class GameControl : MonoBehaviour {
 		}
 		_instance = this;
 		DontDestroyOnLoad (this);
-
-		_itemCreaters = GetComponents<ItemNumCreater>();
-		if (_itemCreaters != null) {
-			foreach(var it in _itemCreaters) {
-				it.onItemsCreateEvent = OnItemsCreate;
-			}
-		}
 	}
 
 	void Start() {
 		InitGameView ();
 		ShowBox (startBox);
-	}
-
-	private void OnItemsCreate(GameObject pick) {
-		pick.transform.position = GetRandomPosInPlane (pick);
-		pick.transform.SetParent (itemsHolder.transform, true);
 	}
 }

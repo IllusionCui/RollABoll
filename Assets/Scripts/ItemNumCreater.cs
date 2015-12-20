@@ -8,7 +8,7 @@ public class ItemNumCreater : MonoBehaviour {
 	public float waveInterval;
 	public int waveNum;
 
-	public delegate void OnItemsCreate(GameObject item); 
+	public delegate void OnItemsCreate(ItemNumCreater creater, GameObject item); 
 	public OnItemsCreate onItemsCreateEvent;
 
 	private bool _isCreating;
@@ -72,7 +72,7 @@ public class ItemNumCreater : MonoBehaviour {
 			for(int i = 0; i < _createNumPerWave; i++) {
 				GameObject item = Instantiate (itemPerfab);
 				_items.Add (item);
-				onItemsCreateEvent.Invoke (item);
+				onItemsCreateEvent.Invoke (this, item);
 			}
 			_currWave++;
 		}
