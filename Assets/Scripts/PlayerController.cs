@@ -27,20 +27,28 @@ public class PlayerController : GameItem {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		CheckCollision (other);
+	}
+
+	void OnCollisionEnter(Collision collision) {
+		CheckCollision (collision.collider);
+	}
+
+	void CheckCollision(Collider other) {
 		if (!IsOperationable) {
 			return;
 		}
 
 		ObstacleItem obstacle = other.gameObject.GetComponent<ObstacleItem>();
 		if (obstacle != null) {
-			Debug.Log ("ObstacleItem");
+//			Debug.Log ("ObstacleItem");
 			GameControl.Instance.GameOver ();
 			return;
 		}
 
 		EnergyItem energyItem = other.gameObject.GetComponent<EnergyItem> ();
 		if (energyItem != null) {
-			Debug.Log ("energyItem");
+//			Debug.Log ("energyItem");
 			energyValueController.AddValue (energyItem.value);
 			GameControl.Instance.OnItemBeEat (other.gameObject);
 			return;
@@ -48,7 +56,7 @@ public class PlayerController : GameItem {
 
 		GameItem gItem = other.gameObject.GetComponent<GameItem>();
 		if (gItem != null) {
-			Debug.Log ("GameItem");
+//			Debug.Log ("GameItem");
 			if (radius > gItem.radius) {
 				// eat it
 				float selfValue = GetValue(radius);
