@@ -5,7 +5,7 @@ using System.Collections;
 public class PlayerController : GameItem {
 	public CdController operationCdController;
 	public ValueController energyValueController;
-	public float massOriginValue;
+	public float originRadius;
 
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
@@ -50,7 +50,6 @@ public class PlayerController : GameItem {
 		if (energyItem != null) {
 			energyValueController.AddValue (energyItem.value);
 			GameControl.Instance.OnItemBeEat (other.gameObject);
-			return;
 		}
 
 		MassItem massItem = other.gameObject.GetComponent<MassItem>();
@@ -72,7 +71,7 @@ public class PlayerController : GameItem {
 
 	public void Reset() {
 		IsOperationable = false;
-		_massItem.value = massOriginValue;
+		UpdateRadius (originRadius);
 		transform.position = GameControl.Instance.GetRandomPosInPlane (this.gameObject);
 	}
 

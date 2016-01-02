@@ -12,3 +12,7 @@
 /Users/illusioncuimac/IdeaProjects/RollABoll/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/illusioncuimac/IdeaProjects/RollABoll/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/illusioncuimac/IdeaProjects/RollABoll/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Users/illusioncuimac/IdeaProjects/RollABoll/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/illusioncuimac/IdeaProjects/RollABoll/Temp/bin/Debug/Assembly-CSharp.dll
+/Users/illusioncuimac/IdeaProjects/RollABoll/obj/Debug/Assembly-CSharp.dll
+/Users/illusioncuimac/IdeaProjects/RollABoll/obj/Debug/Assembly-CSharp.dll.mdb

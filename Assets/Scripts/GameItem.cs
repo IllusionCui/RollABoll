@@ -11,6 +11,7 @@ public class GameItem : MonoBehaviour {
 	protected Rigidbody _rb;
 	protected float _baseRadius;
 	protected MassItem _massItem;
+	protected float _currRadius;
 
 	public float GetMassValue() {
 		return _massItem.value;
@@ -20,14 +21,19 @@ public class GameItem : MonoBehaviour {
 		_rb = GetComponent<Rigidbody>();
 		_massItem = GetComponent<MassItem>();
 		_massItem.onValueChangedCallBack += OnMassItemValueChanged;
+		OnMassItemValueChanged (_massItem);
 	}
 
 	// 更新顯示
+	public void UpdateRadius(float radius_) {
+		_massItem.value = density * 3 / 4 * Mathf.Pow (radius_, 3);
+	}
+
 	void OnMassItemValueChanged(ValueItem massItem) {
 		if (_massItem == massItem) {
-			float newRadius = Mathf.Pow ((_massItem.value/density) * 4 / 3, 1.0f / 3);
+			_currRadius = Mathf.Pow ((_massItem.value/density) * 4 / 3, 1.0f / 3);
 			_rb.mass = _massItem.value;
-			transform.localScale = Vector3.one * (newRadius/radius);
+			transform.localScale = Vector3.one * (_currRadius/radius);
 		}
 	}
 
@@ -39,7 +45,7 @@ public class GameItem : MonoBehaviour {
 	}
 
 	public float GetSpeed() {
-		float resA = Mathf.Pow (Config.Instance.speedParmA / Mathf.Pow (radius, 2), 0.5f);
+		float resA = Mathf.Pow (Config.Instance.speedParmA / Mathf.Pow (_currRadius, 2), 0.5f);
 		return Config.Instance.speedParmB + resA;
 	}
 
