@@ -5,14 +5,28 @@ using System.Collections;
 public class ValueController {
 	public float[] levelLimits;
 
+	public delegate void OnValueChanged(ValueController vc);
+	public event OnValueChanged onValueChangedCallBack;
+
 	private float value;
 
 	public void AddValue(float addValue) {
-		value += addValue;
+		SetValue (value + addValue);
+	}
+
+	public float GetValue() {
+		return value;
 	}
 
 	public void ResetValue() {
-		value = 0;
+		SetValue (0);
+	}
+
+	private void SetValue(float value_) {
+		value = value_;
+		if (onValueChangedCallBack != null) {
+			onValueChangedCallBack.Invoke(this);
+		}
 	}
 
 	public int GetCurrLevel() {

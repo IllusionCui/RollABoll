@@ -4,6 +4,7 @@ using System.Collections;
 
 public class PlayerController : GameItem {
 	public CdController operationCdController;
+	public CdController energySkillCdController;
 	public ValueController energyValueController;
 	public float originRadius;
 
@@ -19,9 +20,25 @@ public class PlayerController : GameItem {
 		get { return _isOperationable; }
 	}
 
+	public void DoEnergySkill() {
+		energySkillCdController.Active = true;
+		energyValueController.ResetValue ();
+		_rb.velocity = _rb.velocity * 5;
+	}
+
+	void EnergySkillAction() {
+		if (operationCdController.IsFinished) {
+			operationCdController.Active = false;
+		} 
+	}
+
 	void FixedUpdate() {
 		if (IsOperationable) {
-			CricleOperation ();
+			if (energySkillCdController.Active) {
+				EnergySkillAction ();
+			} else {
+				CricleOperation ();
+			}
 		} else {
 			CricleAction ();
 		}
@@ -42,7 +59,11 @@ public class PlayerController : GameItem {
 
 		ObstacleItem obstacle = other.gameObject.GetComponent<ObstacleItem>();
 		if (obstacle != null) {
-			GameControl.Instance.GameOver ();
+			if (energySkillCdController.Active) {
+				energySkillCdController.Active = false;
+			} else {
+				GameControl.Instance.GameOver ();
+			}
 			return;
 		}
 
