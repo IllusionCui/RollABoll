@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerController : GameItem {
 	public CdController operationCdController;
 	public ValueController energyValueController;
+	public float massOriginValue;
 
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
@@ -41,31 +42,25 @@ public class PlayerController : GameItem {
 
 		ObstacleItem obstacle = other.gameObject.GetComponent<ObstacleItem>();
 		if (obstacle != null) {
-//			Debug.Log ("ObstacleItem");
 			GameControl.Instance.GameOver ();
 			return;
 		}
 
 		EnergyItem energyItem = other.gameObject.GetComponent<EnergyItem> ();
 		if (energyItem != null) {
-//			Debug.Log ("energyItem");
 			energyValueController.AddValue (energyItem.value);
 			GameControl.Instance.OnItemBeEat (other.gameObject);
 			return;
 		}
 
-		GameItem gItem = other.gameObject.GetComponent<GameItem>();
-		if (gItem != null) {
-//			Debug.Log ("GameItem");
-			if (radius > gItem.radius) {
+		MassItem massItem = other.gameObject.GetComponent<MassItem>();
+		if (massItem != null) {
+			Config config = Config.Instance;
+			if (_massItem.value >= massItem.value * config.absorbLimit) {
 				// eat it
-				float selfValue = GetValue(radius);
-				float add = gItem.GetValue(gItem.radius)*Config.Instance.absorbRate;
-				UpdateRadiusByValue(selfValue + add);
+				_massItem.value += massItem.value*config.absorbRate;
 				GameControl.Instance.OnItemBeEat (other.gameObject);
-			} else if (radius < gItem.radius) {
-				// back
-			} // else nothing happened
+			}
 		}
 	}
 
@@ -77,7 +72,7 @@ public class PlayerController : GameItem {
 
 	public void Reset() {
 		IsOperationable = false;
-		UpdateRadiusByValue(GetValue(_baseRadius));
+		_massItem.value = massOriginValue;
 		transform.position = GameControl.Instance.GetRandomPosInPlane (this.gameObject);
 	}
 

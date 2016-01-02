@@ -7,6 +7,7 @@ public class Config : MonoBehaviour {
 
 	public float moveRate = 1.0f;
 	public float absorbRate = 1.0f/6;
+	public float absorbLimit = 1.1f;
 
 	// cricle operation
 	public float operationLimit = 0.0f;

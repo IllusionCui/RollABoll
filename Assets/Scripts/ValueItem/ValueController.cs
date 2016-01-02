@@ -5,14 +5,14 @@ using System.Collections;
 public class ValueController {
 	public float[] levelLimits;
 
-	private float _value;
+	private float value;
 
 	public void AddValue(float addValue) {
-		_value += addValue;
+		value += addValue;
 	}
 
 	public void ResetValue() {
-		_value = 0;
+		value = 0;
 	}
 
 	public int GetCurrLevel() {
@@ -22,7 +22,7 @@ public class ValueController {
 
 		int res = 0;
 		for(int i = 0; i < levelLimits.Length; i++) {
-			if (levelLimits[i] > _value) {
+			if (levelLimits[i] > value) {
 				break;
 			}
 			res = i + 1;
