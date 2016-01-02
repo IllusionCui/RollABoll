@@ -26,12 +26,12 @@ public class GameItem : MonoBehaviour {
 
 	// 更新顯示
 	public void UpdateRadius(float radius_) {
-		_massItem.value = density * 3 / 4 * Mathf.Pow (radius_, 3);
+		_massItem.value = density * 4 / 3 * Mathf.Pow (radius_, 3);
 	}
 
 	void OnMassItemValueChanged(ValueItem massItem) {
 		if (_massItem == massItem) {
-			_currRadius = Mathf.Pow ((_massItem.value/density) * 4 / 3, 1.0f / 3);
+			_currRadius = Mathf.Pow ((_massItem.value/density) * 3 / 4, 1.0f / 3);
 			_rb.mass = _massItem.value;
 			transform.localScale = Vector3.one * (_currRadius/radius);
 		}
