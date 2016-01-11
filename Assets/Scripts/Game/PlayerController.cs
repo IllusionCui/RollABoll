@@ -93,6 +93,7 @@ public class PlayerController : GameItem {
 	public void Reset() {
 		IsOperationable = false;
 		UpdateRadius (originRadius);
+		energyValueController.ResetValue ();
 		transform.position = GameControl.Instance.GetRandomPosInPlane (this.gameObject);
 	}
 

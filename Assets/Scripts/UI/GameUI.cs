@@ -11,6 +11,7 @@ public class GameUI : MonoBehaviour {
 	void Start() {
 		_player = GameControl.Instance.player.GetComponent<PlayerController> ();
 		_player.energyValueController.onValueChangedCallBack += OnPlayerEnergyValueChanged;
+		OnPlayerEnergyValueChanged (_player.energyValueController);
 	}
 
 	void OnPlayerEnergyValueChanged (ValueController vc) {
