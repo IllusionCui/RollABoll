@@ -25,6 +25,22 @@ public class ItemNumCreater : MonoBehaviour {
 		return true;
 	}
 
+	public bool CheckWithCollision(GameObject item) {
+		Collider baseCollider = item.GetComponent<Collider> ();
+		if (baseCollider != null) {
+			foreach(var it in _items) {
+				if (item == it) {
+					continue;
+				}
+				Collider checkTarget = it.GetComponent<Collider> ();
+				if (checkTarget != null && baseCollider.bounds.Intersects(checkTarget.bounds)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public bool RemoveItem(GameObject item) {
 		bool res = _items.Remove(item);
 		if (res) {
