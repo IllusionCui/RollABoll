@@ -67,10 +67,17 @@ public class PlayerController : GameItem {
 			return;
 		}
 
+		BombItem bombItem = other.gameObject.GetComponent<BombItem>();
+		if (bombItem != null) {
+			bombItem.Trigger();
+			return;
+		}
+
+		bool eat = false;
 		EnergyItem energyItem = other.gameObject.GetComponent<EnergyItem> ();
 		if (energyItem != null) {
 			energyValueController.AddValue (energyItem.value);
-			GameControl.Instance.OnItemBeEat (other.gameObject);
+			eat = true;
 		}
 
 		MassItem massItem = other.gameObject.GetComponent<MassItem>();
@@ -79,8 +86,12 @@ public class PlayerController : GameItem {
 			if (_massItem.value >= massItem.value * config.absorbLimit) {
 				// eat it
 				_massItem.value += massItem.value*config.absorbRate;
-				GameControl.Instance.OnItemBeEat (other.gameObject);
+				eat = true;
 			}
+		}
+
+		if (eat) {
+			GameControl.Instance.RemoveItem (other.gameObject);
 		}
 	}
 

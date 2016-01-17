@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class GameControl : MonoBehaviour {
 	public PlaneInfo[] planeInfo;
 	public GameObject itemsHolder;
+	public GameObject bombItemsHolder;
 	public GameObject player;
 
 	public GameObject startBox;
@@ -47,10 +48,29 @@ public class GameControl : MonoBehaviour {
 		}
 	}
 
-	public void OnItemBeEat(GameObject item) {
+	public bool RemoveItem(GameObject item) {
 		if (planeInfo != null) {
 			for(int i =0; i < planeInfo.Length; i++) {
-				planeInfo [i].RemoveItem (item);
+				if (planeInfo [i].RemoveItem (item)) {
+					return true;
+				}
+			}
+		}
+
+		Destroy (item);
+		return false;
+	}
+
+	public void BombTriggered(Vector3 explosionPos, float radius) {
+		if (planeInfo != null) {
+			for(int i =0; i < planeInfo.Length; i++) {
+				planeInfo [i].BombTriggered (explosionPos, radius);
+			}
+		}
+		if (player != null) {
+			BombableItem bombableItem = player.GetComponent<BombableItem> ();
+			if (bombableItem != null) {
+				bombableItem.ExplodeAction (explosionPos, radius);
 			}
 		}
 	}

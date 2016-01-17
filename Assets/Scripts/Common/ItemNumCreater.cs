@@ -16,6 +16,12 @@ public class ItemNumCreater : MonoBehaviour {
 	private int _createNumPerWave;
 	private HashSet<GameObject> _items = new HashSet<GameObject>();
 
+	public HashSet<GameObject> Items {
+		get { 
+			return _items;
+		}
+	}
+
 	public bool TryCreate() {
 		if (_isCreating) {
 			return false;
@@ -47,6 +53,12 @@ public class ItemNumCreater : MonoBehaviour {
 			Destroy (item);
 		}
 		return res;
+	}
+
+	public void RemoveItems(List<GameObject> items) {
+		for (int i = 0; i < items.Count; i++) {
+			RemoveItem (items[i]);
+		}
 	}
 
 	public void Reset() {

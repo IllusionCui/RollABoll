@@ -11,18 +11,38 @@ public class PlaneInfo : MonoBehaviour {
 
 	public void Reset() {
 		if (_itemCreaters != null) {
-			foreach(var it in _itemCreaters) {
-				it.Reset ();
+			for (int i = 0; i < _itemCreaters.Length; i++) {
+				_itemCreaters[i].Reset ();
 			}
 		}
 	}
 
-	public void RemoveItem(GameObject item) {
+	public bool RemoveItem(GameObject item) {
 		if (_itemCreaters != null) {
-			foreach(var it in _itemCreaters) {
-				if (it.RemoveItem (item)) {
-					break;
+			for (int i = 0; i < _itemCreaters.Length; i++) {
+				if (_itemCreaters[i].RemoveItem (item)) {
+					return true;
 				}
+			}
+		}
+
+		return false;
+	}
+
+	public void BombTriggered(Vector3 explosionPos, float radius) {
+		if (_itemCreaters != null) {
+			for (int i = 0; i < _itemCreaters.Length; i++) {
+				if (_itemCreaters[i].itemPerfab == null || _itemCreaters[i].itemPerfab.GetComponent<BombableItem>() == null) {
+					continue;
+				}
+				List<GameObject> removeItems = new List<GameObject> ();
+				foreach(var it in _itemCreaters[i].Items) {
+					BombableItem bombableItem = it.GetComponent<BombableItem> ();
+					if (bombableItem.ExplodeAction(explosionPos, radius)) {
+						removeItems.Add (it);
+					}
+				}
+				_itemCreaters[i].RemoveItems (removeItems);
 			}
 		}
 	}
@@ -65,8 +85,8 @@ public class PlaneInfo : MonoBehaviour {
 	void Awake() {
 		_itemCreaters = GetComponents<ItemNumCreater>();
 		if (_itemCreaters != null) {
-			foreach(var it in _itemCreaters) {
-				it.onItemsCreateEvent = OnItemsCreate;
+			for (int i = 0; i < _itemCreaters.Length; i++) {
+				_itemCreaters[i].onItemsCreateEvent = OnItemsCreate;
 			}
 		}
 	}

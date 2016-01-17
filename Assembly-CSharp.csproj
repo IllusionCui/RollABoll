@@ -45,21 +45,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BaseItem\BombableItem.cs" />
+     <Compile Include="Assets\Scripts\BaseItem\EnergyItem.cs" />
+     <Compile Include="Assets\Scripts\BaseItem\MassItem.cs" />
+     <Compile Include="Assets\Scripts\BaseItem\ObstacleItem.cs" />
+     <Compile Include="Assets\Scripts\BaseItem\ValueItem.cs" />
      <Compile Include="Assets\Scripts\Common.cs" />
      <Compile Include="Assets\Scripts\Common\CdController.cs" />
      <Compile Include="Assets\Scripts\Common\ItemNumCreater.cs" />
+     <Compile Include="Assets\Scripts\Common\RangeController.cs" />
      <Compile Include="Assets\Scripts\Common\ValueController.cs" />
      <Compile Include="Assets\Scripts\Config.cs" />
+     <Compile Include="Assets\Scripts\Game\BombItem.cs" />
      <Compile Include="Assets\Scripts\Game\CameraController.cs" />
      <Compile Include="Assets\Scripts\Game\GameItem.cs" />
      <Compile Include="Assets\Scripts\Game\PlaneInfo.cs" />
      <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
      <Compile Include="Assets\Scripts\GameControl.cs" />
      <Compile Include="Assets\Scripts\UI\GameUI.cs" />
-     <Compile Include="Assets\Scripts\ValueItem\EnergyItem.cs" />
-     <Compile Include="Assets\Scripts\ValueItem\MassItem.cs" />
-     <Compile Include="Assets\Scripts\ValueItem\ObstacleItem.cs" />
-     <Compile Include="Assets\Scripts\ValueItem\ValueItem.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
