@@ -17,7 +17,6 @@ public class GameItem : MonoBehaviour {
 		_rb = GetComponent<Rigidbody>();
 		_massItem = GetComponent<MassItem>();
 		_massItem.onValueChangedCallBack += OnMassItemValueChanged;
-		OnMassItemValueChanged (_massItem);
 	}
 
 	// 更新顯示

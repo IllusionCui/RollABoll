@@ -33,21 +33,23 @@ public class BombableItem : MonoBehaviour {
 			while (pieceNum > 1) {
 				float resValue = currValue / pieceNum;
 				if (resValue > explodeLimit) {
-					float scale = gameObject.transform.localScale.x / pieceNum;
 					for(int i = 0; i < pieceNum; i++) {
 						GameObject item = Instantiate (piecePerfab);
-						item.transform.localScale = item.transform.localScale * scale;
-						item.transform.position = gameObject.transform.position + new Vector3 (Random.Range(-1*pieceRange, 1*pieceRange), 0, Random.Range(-1*pieceRange, 1*pieceRange));
-						item.transform.SetParent (GameControl.Instance.bombItemsHolder.transform, true);
-
 						EnergyItem energyItem = item.GetComponent<EnergyItem> ();
+						float baseValue = 0;
 						if (energyItem != null) {
+							baseValue = energyItem.Value;
 							energyItem.Value = resValue;
 						}
 						MassItem massItem = item.GetComponent<MassItem> ();
 						if (massItem != null) {
+							baseValue = massItem.Value;
 							massItem.Value = resValue;
 						}
+
+						item.transform.localScale = item.transform.localScale * resValue / baseValue;
+						item.transform.position = gameObject.transform.position + new Vector3 (Random.Range(-1*pieceRange, 1*pieceRange), 0, Random.Range(-1*pieceRange, 1*pieceRange));
+						item.transform.SetParent (GameControl.Instance.bombItemsHolder.transform, true);
 					}
 					return true;
 				} else {

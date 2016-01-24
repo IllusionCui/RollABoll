@@ -2,18 +2,17 @@
 using System.Collections;
 
 public class ValueItem : MonoBehaviour {
-	[SerializeField]
-	private float _value;
+	public float value;
 
 	public float Value {
 		set { 
-			_value = value;
+			value = value;
 			if (onValueChangedCallBack != null) {
 				onValueChangedCallBack.Invoke (this);
 			}
 		}
 		get { 
-			return _value;
+			return value;
 		}
 	}
 
