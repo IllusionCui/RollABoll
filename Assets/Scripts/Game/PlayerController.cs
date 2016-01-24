@@ -3,10 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : GameItem {
+	public float originMassValue;
 	public CdController operationCdController;
 	public CdController energySkillCdController;
 	public ValueController energyValueController;
-	public float originRadius;
 
 	private bool _isUserOperation;
 	private Vector3 _lastUserOperationPos;
@@ -76,16 +76,16 @@ public class PlayerController : GameItem {
 		bool eat = false;
 		EnergyItem energyItem = other.gameObject.GetComponent<EnergyItem> ();
 		if (energyItem != null) {
-			energyValueController.AddValue (energyItem.value);
+			energyValueController.AddValue (energyItem.Value);
 			eat = true;
 		}
 
 		MassItem massItem = other.gameObject.GetComponent<MassItem>();
 		if (massItem != null) {
 			Config config = Config.Instance;
-			if (_massItem.value >= massItem.value * config.absorbLimit) {
+			if (_massItem.Value >= massItem.Value * config.absorbLimit) {
 				// eat it
-				_massItem.value += massItem.value*config.absorbRate;
+				_massItem.Value += massItem.Value*config.absorbRate;
 				eat = true;
 			}
 		}
@@ -103,7 +103,7 @@ public class PlayerController : GameItem {
 
 	public void Reset() {
 		IsOperationable = false;
-		UpdateRadius (originRadius);
+		UpdateMassValue (originMassValue);
 		energyValueController.ResetValue ();
 		transform.position = GameControl.Instance.GetRandomPosInPlane (this.gameObject);
 	}

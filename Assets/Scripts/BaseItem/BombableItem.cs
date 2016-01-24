@@ -20,13 +20,13 @@ public class BombableItem : MonoBehaviour {
 			{
 				EnergyItem energyItem = GetComponent<EnergyItem> ();
 				if (energyItem != null) {
-					currValue = energyItem.value;
-					energyItem.value = currValue * (1 - bombRate);
+					currValue = energyItem.Value;
+					energyItem.Value = currValue * (1 - bombRate);
 				}
 				MassItem massItem = GetComponent<MassItem> ();
 				if (massItem != null) {
-					currValue = massItem.value;
-					massItem.value = currValue * (1 - bombRate);
+					currValue = massItem.Value;
+					massItem.Value = currValue * (1 - bombRate);
 				}
 				currValue = currValue * bombRate;
 			}
@@ -42,13 +42,11 @@ public class BombableItem : MonoBehaviour {
 
 						EnergyItem energyItem = item.GetComponent<EnergyItem> ();
 						if (energyItem != null) {
-							energyItem.value = resValue;
-							Debug.Log ("aaaaaa");
+							energyItem.Value = resValue;
 						}
 						MassItem massItem = item.GetComponent<MassItem> ();
 						if (massItem != null) {
-							massItem.value = resValue;
-							Debug.Log ("bbbbbbbb");
+							massItem.Value = resValue;
 						}
 					}
 					return true;

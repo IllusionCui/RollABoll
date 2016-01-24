@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Config : MonoBehaviour {
+	public float density = 10.0f;
+
 	public float speedParmB = 0.01f;
 	public float speedParmA = 0.0001f;
 

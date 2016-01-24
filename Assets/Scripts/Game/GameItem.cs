@@ -2,19 +2,15 @@
 using System.Collections;
 
 public class GameItem : MonoBehaviour {
-	public float density;
-	public float radius;
-
 	public bool autoCricle = false;
 	public bool dir = true;
 
 	protected Rigidbody _rb;
 	protected float _baseRadius;
 	protected MassItem _massItem;
-	protected float _currRadius;
 
 	public float GetMassValue() {
-		return _massItem.value;
+		return _massItem.Value;
 	}
 
 	void Awake() {
@@ -25,15 +21,14 @@ public class GameItem : MonoBehaviour {
 	}
 
 	// 更新顯示
-	public void UpdateRadius(float radius_) {
-		_massItem.value = density * 4 / 3 * Mathf.Pow (radius_, 3);
+	public void UpdateMassValue(float value) {
+		_massItem.Value = value;
 	}
 
 	void OnMassItemValueChanged(ValueItem massItem) {
 		if (_massItem == massItem) {
-			_currRadius = Mathf.Pow ((_massItem.value/density) * 3 / 4, 1.0f / 3);
-			_rb.mass = _massItem.value;
-			transform.localScale = Vector3.one * (_currRadius/radius);
+			_rb.mass = _massItem.Value * Config.Instance.density;
+			transform.localScale = Vector3.one * Mathf.Pow (_massItem.Value * 3 / 4, 1.0f / 3);
 		}
 	}
 
@@ -45,7 +40,7 @@ public class GameItem : MonoBehaviour {
 	}
 
 	public float GetSpeed() {
-		float resA = Mathf.Pow (Config.Instance.speedParmA / Mathf.Pow (_currRadius, 2), 0.5f);
+		float resA = Mathf.Pow (Config.Instance.speedParmA / Mathf.Pow (transform.localScale.x, 2), 0.5f);
 		return Config.Instance.speedParmB + resA;
 	}
 
@@ -56,9 +51,8 @@ public class GameItem : MonoBehaviour {
 
 	public Vector3 GetCricleRunVector() {
 		// move
-		Config config = Config.Instance;
 		float speed = GetSpeed ();
-		return GetDirection()*speed*config.moveRate;
+		return GetDirection()*speed*Config.Instance.moveRate;
 	}
 
 	protected void CricleAction() {
