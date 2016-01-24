@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlaneInfo : MonoBehaviour {
+	public GameObject rootPlane;
 	public float max;
 	public float min;
 	public float baseY;
@@ -48,7 +49,7 @@ public class PlaneInfo : MonoBehaviour {
 	}
 
 	public float GetRandomRByIndex() {
-		return Random.Range (min, max);
+		return Random.Range (min, max)*rootPlane.transform.localScale.x;
 	}
 
 	public Vector3 GetRandomPosInPlane(GameObject item) {
