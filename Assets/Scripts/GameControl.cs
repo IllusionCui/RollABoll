@@ -10,6 +10,7 @@ public class GameControl : MonoBehaviour {
 
 	public GameObject startBox;
 	public GameObject endBox;
+	public GameObject pasueBox;
 
 	private PlayerController _pControl;
 	private GameObject _currBox;
@@ -22,6 +23,23 @@ public class GameControl : MonoBehaviour {
 	public void GameOver() {
 		_pControl.Reset();
 		ShowBox (endBox);
+	}
+
+	public void PasueGame() {
+		ShowBox (pasueBox);
+		Time.timeScale = 0;
+	}
+
+	public void ResumeGame() {
+		CloseBox ();
+		Time.timeScale = 1;
+	}
+
+	public void Restart() {
+		CloseBox ();
+		_pControl.Reset();
+		Time.timeScale = 1;
+		_pControl.IsOperationable = true;
 	}
 
 	public void ShowBox(GameObject box) {
