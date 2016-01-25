@@ -2,17 +2,18 @@
 using System.Collections;
 
 public class ValueItem : MonoBehaviour {
-	public float value;
+	public float valueDefalut;
 
+	private float _value;
 	public float Value {
 		set { 
-			value = value;
+			_value = value;
 			if (onValueChangedCallBack != null) {
 				onValueChangedCallBack.Invoke (this);
 			}
 		}
 		get { 
-			return value;
+			return _value;
 		}
 	}
 
