@@ -44,7 +44,7 @@ public class GameItem : MonoBehaviour {
 	}
 
 	public Vector3 GetDirection() {
-		Vector3 initSpeed = new Vector3 (transform.localPosition.z, 0, -transform.localPosition.x) * (dir ? 1 : -1);
+		Vector3 initSpeed = new Vector3 (-transform.localPosition.y, transform.localPosition.x, 0) * (dir ? 1 : -1);
 		return initSpeed.normalized;
 	}
 

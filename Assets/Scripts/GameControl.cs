@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameControl : MonoBehaviour {
-	public PlaneInfo[] planeInfo;
+	public RingInfo[] planeInfo;
 	public GameObject itemsHolder;
 	public GameObject bombItemsHolder;
 	public GameObject player;

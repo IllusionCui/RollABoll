@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Game\GameItem.cs" />
      <Compile Include="Assets\Scripts\Game\PlaneInfo.cs" />
      <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Game\RingInfo.cs" />
      <Compile Include="Assets\Scripts\GameControl.cs" />
      <Compile Include="Assets\Scripts\UI\GameUI.cs" />
  <Reference Include="UnityEngine.UI">

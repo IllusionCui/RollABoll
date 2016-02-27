@@ -165,7 +165,7 @@ public class PlayerController : GameItem {
 			if (operationCdController.IsFinished) {
 				operationCdController.Active = false;
 			} else {
-				Vector3 operationSpeed = (new Vector3 (transform.localPosition.x, 0, transform.localPosition.z)).normalized * (_operationDir ? 1 : -1)*speed*config.cricleSpeedRate;
+				Vector3 operationSpeed = (new Vector3 (0, 1, 0)) * (_operationDir ? 1 : -1)*speed*config.cricleSpeedRate;
 //				Debug.Log("operationSpeed = " + operationSpeed + ", _rb.velocity = " + _rb.velocity);
 				_rb.velocity = _rb.velocity + operationSpeed;
 			}
