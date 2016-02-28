@@ -19,4 +19,8 @@ public class ValueItem : MonoBehaviour {
 
 	public delegate void OnValueChanged(ValueItem item);
 	public event OnValueChanged onValueChangedCallBack;
+
+	public virtual void Awake() {
+		Value = valueDefalut;
+	}
 }

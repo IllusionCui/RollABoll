@@ -2,19 +2,34 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
+	public GameObject itemHolder;
 	public GameItem player;
+	public RingInfo ringInfo;
 	public float length;
-	public float angle;
+
+	private Camera _camera;
+
+	void Awake() {
+		_camera = GetComponent<Camera> ();
+	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		if (player != null) {
-			Vector3 targetPos = player.transform.position;
-			float dis = player.transform.localScale.x * length;
-			angle = (angle % 90 + 90 ) % 90;
-			Vector3 pos = (1 - dis / targetPos.magnitude) * targetPos - player.GetDirection()*dis/Mathf.Tan(angle);
-			transform.position = pos;
-			transform.rotation = Quaternion.LookRotation(targetPos - pos);
+		float dis = player.transform.localScale.x * length;
+		transform.localPosition = new Vector3(ringInfo.radius - dis, - dis, player.transform.position.z);
+
+		for(int i = 0; i < itemHolder.transform.childCount; i++) {
+			GameObject item = itemHolder.transform.GetChild (i).gameObject;
+			item.SetActive (CheckInView(item));
 		}
 	}
+
+	bool CheckInView (GameObject go){
+		Vector3 screenPos = _camera.WorldToScreenPoint(go.transform.position);
+		if (screenPos.x > 0 && screenPos.x < Screen.width && screenPos.y > 0 && screenPos.y < Screen.height) {
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -11,10 +11,8 @@ public class Config : MonoBehaviour {
 	public float absorbRate = 1.0f/6;
 	public float absorbLimit = 1.1f;
 
-	// cricle operation
-	public float operationLimit = 0.0f;
-	public float cricleSpeedRate = 0.3f;
-	public float cricleTimeRate = 5.0f;
+	// operation
+	public float operationAngle = 30f;
 
 	private static Config _instance = null;
 	public static Config Instance {

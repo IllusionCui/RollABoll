@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\BaseItem\ValueItem.cs" />
      <Compile Include="Assets\Scripts\Common.cs" />
      <Compile Include="Assets\Scripts\Common\CdController.cs" />
+     <Compile Include="Assets\Scripts\Common\Helper.cs" />
      <Compile Include="Assets\Scripts\Common\ItemNumCreater.cs" />
      <Compile Include="Assets\Scripts\Common\RangeController.cs" />
      <Compile Include="Assets\Scripts\Common\ValueController.cs" />
@@ -62,7 +63,9 @@
      <Compile Include="Assets\Scripts\Game\PlaneInfo.cs" />
      <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Game\RingInfo.cs" />
+     <Compile Include="Assets\Scripts\Game\ViewManager.cs" />
      <Compile Include="Assets\Scripts\GameControl.cs" />
+     <Compile Include="Assets\Scripts\MoveInputControl.cs" />
      <Compile Include="Assets\Scripts\UI\GameUI.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

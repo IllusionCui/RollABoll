@@ -48,9 +48,13 @@ public class RingInfo : MonoBehaviour {
 
 	public Vector3 GetRandomPosInPlane(GameObject item) {
 		float a = Random.Range (0.0f, 360);
-		float w = Random.Range (0, width);
+		float w = Random.Range (-width/2, width/2);
 		float r = radius - 0.5f;
 		return new Vector3 (r * Mathf.Sin (a), r * Mathf.Cos (a), w);
+	}
+
+	public float GetCenterW() {
+		return transform.position.z + width/2;
 	}
 
 	private void OnItemsCreate(ItemNumCreater creater, GameObject pick) {
