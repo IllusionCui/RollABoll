@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\GameControl.cs" />
      <Compile Include="Assets\Scripts\MoveInputControl.cs" />
      <Compile Include="Assets\Scripts\UI\GameUI.cs" />
+     <None Include="Assets\FBX\ball.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

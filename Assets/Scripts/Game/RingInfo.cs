@@ -5,8 +5,11 @@ using System.Collections.Generic;
 public class RingInfo : MonoBehaviour {
 	public float radius;
 	public float width;
+	public int viewNum;
+	public GameObject[] viewPerfab;
 
 	private ItemNumCreater[] _itemCreaters;
+	private List<GameObject> _views = new List<GameObject>();
 
 	public void Reset() {
 		if (_itemCreaters != null) {
@@ -87,6 +90,14 @@ public class RingInfo : MonoBehaviour {
 			for (int i = 0; i < _itemCreaters.Length; i++) {
 				_itemCreaters[i].onItemsCreateEvent = OnItemsCreate;
 			}
+		}
+
+		float angle = 360 / viewNum;
+		for(int i = 0; i < viewNum; i++) {
+			int index = Random.Range (0, viewPerfab.Length - 1);
+			GameObject view = Instantiate (viewPerfab[index]);
+			view.transform.Rotate (new Vector3(angle*i, 0, 0));
+			view.transform.SetParent (GameControl.Instance.ringHolder.transform, true);
 		}
 	}
 }

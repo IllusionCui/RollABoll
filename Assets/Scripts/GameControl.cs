@@ -6,6 +6,7 @@ public class GameControl : MonoBehaviour {
 	public RingInfo[] planeInfo;
 	public GameObject itemsHolder;
 	public GameObject bombItemsHolder;
+	public GameObject ringHolder;
 	public GameObject player;
 
 	public GameObject startBox;
