@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class RingInfo : MonoBehaviour {
-	public float radius;
+	public float height;
 	public float width;
 	public int viewNum;
 	public GameObject[] viewPerfab;
 
+	public float radius;
 	private ItemNumCreater[] _itemCreaters;
 	private List<GameObject> _views = new List<GameObject>();
 
@@ -49,11 +50,15 @@ public class RingInfo : MonoBehaviour {
 		}
 	}
 
-	public Vector3 GetRandomPosInPlane(GameObject item) {
-		float a = Random.Range (0.0f, 360);
+	public Vector3 GetRandomPosInPlane(GameObject item, out float angle, float delR) {
+		angle = Random.Range (0.0f, 360);
+		float a = angle / 180 * Mathf.PI;
 		float w = Random.Range (-width/2, width/2);
-		float r = radius - 0.5f;
-		return new Vector3 (r * Mathf.Sin (a), r * Mathf.Cos (a), w);
+		float r = radius - delR;
+		if (delR > 0) {
+			Debug.Log ("a = " + a + ", w = " + w + ", r = " + r + ", delR = " + delR);
+		}
+		return new Vector3 (r * Mathf.Cos (a), r * Mathf.Sin (a), w);
 	}
 
 	public float GetCenterW() {
@@ -61,7 +66,8 @@ public class RingInfo : MonoBehaviour {
 	}
 
 	private void OnItemsCreate(ItemNumCreater creater, GameObject pick) {
-		pick.transform.position = GetRandomPosInPlane (pick);
+		float angle = 0;
+		pick.transform.position = GetRandomPosInPlane (pick, out angle, 0);
 		if (_itemCreaters != null) {
 			for(int i =0; i < 3; i++) {
 				bool free = true;
@@ -77,10 +83,11 @@ public class RingInfo : MonoBehaviour {
 					if (i == 2) {
 						Debug.Log ("hehehheehhehehe");
 					}
-					pick.transform.position = GetRandomPosInPlane (pick);
+					pick.transform.position = GetRandomPosInPlane (pick, out angle, 0);
 				}
 			}
 		}
+		pick.transform.Rotate (new Vector3(0, 0, angle));
 		pick.transform.SetParent (GameControl.Instance.itemsHolder.transform, true);
 	}
 
@@ -93,10 +100,13 @@ public class RingInfo : MonoBehaviour {
 		}
 
 		float angle = 360 / viewNum;
+		float angleP = 2 * Mathf.PI / viewNum;
+		radius = height / 2 / Mathf.Sin (angleP/2);
 		for(int i = 0; i < viewNum; i++) {
 			int index = Random.Range (0, viewPerfab.Length - 1);
 			GameObject view = Instantiate (viewPerfab[index]);
-			view.transform.Rotate (new Vector3(angle*i, 0, 0));
+			view.transform.Rotate (new Vector3(angle * i, 0, 0));
+			view.transform.position = new Vector3 (radius*Mathf.Cos(angleP*i), radius*Mathf.Sin(angleP*i), 0);
 			view.transform.SetParent (GameControl.Instance.ringHolder.transform, true);
 		}
 	}

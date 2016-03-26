@@ -41,6 +41,6 @@ public class ValueController {
 			}
 			res = i + 1;
 		}
-		return 0;
+		return res;
 	}
 }

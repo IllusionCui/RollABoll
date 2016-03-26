@@ -16,7 +16,7 @@ public class GameUI : MonoBehaviour {
 
 	void OnPlayerEnergyValueChanged (ValueController vc) {
 		energyText.text = string.Format ("{0}/{1}", vc.GetValue(), vc.levelLimits[0]);
-		energyButton.interactable = vc.GetCurrLevel() >= 0;
+		energyButton.interactable = vc.GetCurrLevel() > 0;
 	}
 
 	public void OnEnergySkill() {

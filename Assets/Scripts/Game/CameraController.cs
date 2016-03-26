@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
-	public Transform checkView;
 	public GameItem player;
 	public RingInfo ringInfo;
 	public float length;
@@ -17,14 +16,6 @@ public class CameraController : MonoBehaviour {
 	void LateUpdate () {
 		float dis = player.transform.localScale.x * length;
 		transform.localPosition = new Vector3(ringInfo.radius - dis, - dis, player.transform.position.z);
-
-		for(int i = 0; i < checkView.childCount; i++) {
-			Transform tfp = checkView.GetChild (i).gameObject;
-			for(int j = 0; j < tfp.childCount; j++) {
-				Transform tf= tfp.GetChild (i).gameObject;
-				tf.gameObject.SetActive (CheckInView(tf));
-			}
-		}
 	}
 
 	bool CheckInView (Transform tf){

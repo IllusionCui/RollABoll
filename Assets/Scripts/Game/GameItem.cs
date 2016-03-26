@@ -2,18 +2,18 @@
 using System.Collections;
 
 public class GameItem : MonoBehaviour {
-	public bool autoCricle = false;
 	public bool dir = true;
 
 	protected Rigidbody _rb;
-	protected float _baseRadius;
+	protected Vector3 _baseScale;
 	protected MassItem _massItem;
 
 	public float GetMassValue() {
 		return _massItem.Value;
 	}
 
-	void Awake() {
+	protected virtual void Awake() {
+		_baseScale = transform.localScale;
 		_rb = GetComponent<Rigidbody>();
 		_massItem = GetComponent<MassItem>();
 		_massItem.onValueChangedCallBack += OnMassItemValueChanged;
@@ -27,15 +27,8 @@ public class GameItem : MonoBehaviour {
 	void OnMassItemValueChanged(ValueItem massItem) {
 		if (_massItem == massItem) {
 			_rb.mass = _massItem.Value * Config.Instance.density;
-			transform.localScale = Vector3.one * Mathf.Pow (_massItem.Value * 3 / 4, 1.0f / 3);
+			transform.localScale = _baseScale * Mathf.Pow (_massItem.Value / _massItem.valueDefalut, 1.0f / 3);
 		}
-	}
-
-	//速度計算相關
-	void FixedUpdate() {
-		if (autoCricle) {
-			CricleAction ();
-		} 
 	}
 
 	public float GetSpeed() {
@@ -44,7 +37,7 @@ public class GameItem : MonoBehaviour {
 	}
 
 	public Vector3 GetDirection() {
-		Vector3 initSpeed = new Vector3 (-transform.localPosition.y, transform.localPosition.x, 0) * (dir ? 1 : -1);
+		Vector3 initSpeed = new Vector3 (-transform.position.y, transform.position.x, 0) * (dir ? 1 : -1);
 		return initSpeed.normalized;
 	}
 
@@ -56,5 +49,9 @@ public class GameItem : MonoBehaviour {
 
 	protected void CricleAction() {
 		_rb.velocity = GetCricleRunVector ();
+	}
+
+	public void GotoGroudForce() {
+		_rb.AddForce (new Vector3(transform.position.x, transform.position.y, 0).normalized*9.8f, ForceMode.VelocityChange);
 	}
 }

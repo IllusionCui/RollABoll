@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : GameItem {
-	public float originMassValue;
 	public MoveInputControl moveInputController;
 	public CdController energySkillCdController;
 	public ValueController energyValueController;
@@ -40,9 +39,8 @@ public class PlayerController : GameItem {
 			Vector3 circleVector = GetCricleRunVector ();
 			Vector3 dirVector = new Vector3(0, 0, circleVector.magnitude / Mathf.Tan(angle)*(dir ? -1 : 1));
 			_rb.velocity = (circleVector + dirVector)*speedRate;
-		} else {
-			CricleAction ();
-		}
+			GotoGroudForce ();
+		} 
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -98,9 +96,10 @@ public class PlayerController : GameItem {
 
 	public void Reset() {
 		IsOperationable = false;
-		UpdateMassValue (originMassValue);
+		UpdateMassValue (_massItem.valueDefalut);
 		energyValueController.ResetValue ();
-//		transform.position = GameControl.Instance.GetRandomPosInPlane (this.gameObject);
+		float angle;
+		transform.position = GameControl.Instance.planeInfo.GetRandomPosInPlane (gameObject, out angle, 0);
 	}
 
 	float ProcessInput() {
